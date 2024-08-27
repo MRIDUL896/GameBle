@@ -5,6 +5,7 @@ import LoginModal from "./Components/LoginModal";
 import { useSelector } from "react-redux";
 import Footer from "./Components/Footer";
 import FortuneFlip from "./Components/games/FortuneFlip";
+import Mines from "./Components/games/Mines";
 
 function App() {
   const { isLoggedIn } = useSelector((state) => state.user);
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/fortuneflip" element={<FortuneFlip/>}/>
+          <Route path="/mines" element={<Mines/>}/>
         </Routes>
         {!isLoggedIn && <LoginModal onClose={() => {}} />}
       </BrowserRouter>

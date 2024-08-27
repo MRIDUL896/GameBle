@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
 import coinFlip from '../../assets/coin_flip.jpeg';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { updateBalance } from '../../store/userSlice'; 
 
 const FortuneFlip = () => {
+    const dispatch = useDispatch();
+    const { isLoggedIn, userInfo } = useSelector((state) => state.user);
     const [choice, setChoice] = useState("");
     const [betAmount, setBetAmount] = useState(10);
-    const [cresult, setCresult] = useState("");
-    const [balance, setBalance] = useState(1000); // Starting balance
+    const [cresult, setCresult] = useState(null);
+    const [balance, setBalance] = useState(isLoggedIn ? userInfo.balance : 0);
     const [isFlipping, setIsFlipping] = useState(false);
 
     const handleBet = (amount) => {
         setBetAmount(amount);
     };
 
-    const flipCoin = () => {
+    const flipCoin = async (playerChoice) => {
         if (balance < betAmount) {
             alert("Insufficient balance!");
             return;
@@ -22,13 +27,31 @@ const FortuneFlip = () => {
         setCresult(null);
 
         // Simulate coin flip
-        setTimeout(() => {
+        setTimeout(async () => {
             const re = Math.random() < 0.5 ? "heads" : "tails";
             setCresult(re);
-            setBalance(prevBalance => re===choice ? prevBalance + betAmount : prevBalance - betAmount);
+
+            const newBalance = re === playerChoice
+                ? balance + betAmount
+                : balance - betAmount;
+
+            setBalance(newBalance);
+
+            try {
+                await axios.put('http://localhost:8000/gameble/updateBalance', {
+                    email: userInfo.email,
+                    newBalance
+                });
+                dispatch(updateBalance(newBalance)); // Update Redux state
+            } catch (error) {
+                console.error("Error updating balance:", error);
+                setBalance(balance);
+            }
+
             setIsFlipping(false);
         }, 1000);
     };
+
 
     return (
         <div className='w-full p-3' style={{ backgroundImage: `url(${coinFlip})` }}>
@@ -37,7 +60,7 @@ const FortuneFlip = () => {
                 <p className="mb-4 text-center">Balance: ${balance}</p>
                 <div className='flex justify-center items-center bg-yellow-400 h-20 w-20 rounded-full border-8 border-yellow-600'>
                     {cresult && (
-                        <div className='font-bold text-3xl'> {cresult==="heads" ? "H" : "T"} </div>
+                        <div className='font-bold text-3xl'> {cresult === "heads" ? "H" : "T"} </div>
                     )}
                 </div>
                 <div className="flex flex-col items-center m-4">
@@ -58,10 +81,10 @@ const FortuneFlip = () => {
                 <div className='flex gap-5'>
                     <button
                         onClick={() => {
-                            flipCoin();
                             setChoice("heads");
+                            flipCoin("heads");
                         }}
-                        disabled={isFlipping}
+                        disabled={isFlipping || balance===0}
                         className="w-[50%] bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 disabled:opacity-50"
                     >
                         {isFlipping ? 'Flipping...' : 'Heads'}
@@ -69,10 +92,10 @@ const FortuneFlip = () => {
 
                     <button
                         onClick={() => {
-                            flipCoin();
                             setChoice("tails");
+                            flipCoin("tails");
                         }}
-                        disabled={isFlipping}
+                        disabled={isFlipping || balance === 0}
                         className="w-[50%] bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 disabled:opacity-50"
                     >
                         {isFlipping ? 'Flipping...' : 'Tails'}

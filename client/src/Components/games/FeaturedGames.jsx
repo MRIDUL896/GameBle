@@ -1,12 +1,14 @@
 import React from 'react';
 import coin from '../../assets/coin_flip.jpeg';
+import mines from '../../assets/mines.webp';
+
 const FeaturedGames = () => {
     // This would typically come from an API or database
     const games = [
-        { id: 1, name: "Fortune Flip", image: coin, category: "Double or Nothing" },
-        { id: 2, name: "Blackjack Pro", image: "path/to/blackjack-image.jpg", category: "Table Games" },
-        { id: 3, name: "Lucky Roulette", image: "path/to/roulette-image.jpg", category: "Table Games" },
-        { id: 4, name: "Poker Night", image: "path/to/poker-image.jpg", category: "Poker" },
+        { id: 1, name: "Fortune Flip", image: coin, category: "Double or Nothing",link : "/fortuneflip" },
+        { id: 2, name: "Mines", image: mines, category: "Grid Games" , link : "/mines"},
+        { id: 3, name: "Lucky Roulette", image: "path/to/roulette-image.jpg", category: "Table Games" , link : "/" },
+        { id: 4, name: "Poker Night", image: "path/to/poker-image.jpg", category: "Poker", link : "/" },
     ];
 
     return (
@@ -20,7 +22,7 @@ const FeaturedGames = () => {
                             <div className="p-4">
                                 <h3 className="text-xl font-semibold text-white mb-2">{game.name}</h3>
                                 <p className="text-gray-400">{game.category}</p>
-                                <a href="/fortuneflip">
+                                <a href={game.link}>
                                     <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300">
                                         Play Now
                                     </button>
