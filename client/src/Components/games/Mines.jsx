@@ -7,6 +7,7 @@ import mines from '../../assets/mines.webp';
 const Mines = () => {
     const dispatch = useDispatch();
     const { isLoggedIn, userInfo } = useSelector((state) => state.user);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [grid, setGrid] = useState(Array(16).fill(null));
     const [minePositions, setMinePositions] = useState([]);
     const [difficulty, setDifficulty] = useState('easy');
@@ -35,6 +36,7 @@ const Mines = () => {
                 mines.push(position);
             }
         }
+        setIsPlaying(true);
         setMinePositions(mines);
         setGrid(newGrid);
         setGameOver(false);
@@ -62,6 +64,7 @@ const Mines = () => {
     };
 
     const endGame = async (won) => {
+        setIsPlaying(false);
         setGameOver(true);
         let finalReward = won ? reward * difficultySettings[difficulty].multiplier : reward;
         const newBalance = balance + finalReward - betAmount;
@@ -83,7 +86,6 @@ const Mines = () => {
             <div className="flex flex-col items-center bg-gradient-to-r from-cyan-900 to-purple-900 text-white mb-5 p-12 rounded-lg shadow-lg max-w-md mx-auto border border-emerald-600">
                 <h2 className="text-3xl font-bold mb-4">Mines</h2>
                 <p className="mb-4">Balance: ${balance}</p>
-
                 <div className="mb-4">
                     <label className="mr-2">Difficulty:</label>
                     <select
@@ -114,20 +116,22 @@ const Mines = () => {
                     Start Game
                 </button>
 
-                <div className="grid grid-cols-4 gap-2 mb-4">
-                    {grid.map((cell, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handleCellClick(index)}
-                            className={`w-16 h-16 hover:bg-purple-400 ${cell === null ? 'bg-purple-700' :
+                {isPlaying && (
+                    <div className="grid grid-cols-4 gap-2 mb-4">
+                        {grid.map((cell, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleCellClick(index)}
+                                className={`w-16 h-16 hover:bg-purple-400 ${cell === null ? 'bg-purple-700' :
                                     cell === 'X' ? 'bg-red-700' : 'bg-green-700'
-                                } rounded-lg font-bold text-2xl`}
-                            disabled={gameOver || cell !== null}
-                        >
-                            {cell}
-                        </button>
-                    ))}
-                </div>
+                                    } rounded-lg font-bold text-2xl`}
+                                disabled={gameOver || cell !== null}
+                            >
+                                {cell}
+                            </button>
+                        ))}
+                    </div>
+                )}
 
                 <p className="text-xl font-bold mb-2">Current Reward: ${reward.toFixed(2)}</p>
 

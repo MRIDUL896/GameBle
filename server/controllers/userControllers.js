@@ -55,7 +55,8 @@ const handleLogin = async (req,res) => {
                 username: user.username,
                 email: user.email,
                 name : user.name,
-                balance : user.coins
+                balance : user.coins,
+                phoneNo : user.phoneNo
                 // Add any other user properties you want to include
             }
         });

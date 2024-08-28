@@ -17,7 +17,6 @@ const Header = () => {
     const dispatch = useDispatch();
 
     const handleLogout = async () => {
-        console.log("inside");
         try {
             const response = await axios.post('http://localhost:8000/gameble/logout', {
                 email,

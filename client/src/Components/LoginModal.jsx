@@ -5,9 +5,10 @@ import axios from 'axios';
 
 const LoginModal = ({ onClose }) => {
     const [isLogin, setIsLogin] = useState(true);
-    const [username, setUsername] = useState('');
+    const [name, setname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [phoneNo, setPhoneNo] = useState('');
     const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
@@ -25,9 +26,10 @@ const LoginModal = ({ onClose }) => {
             } else {
                 // Handle signup
                 response = await axios.post('http://localhost:8000/gameble/signup', {
-                    username,
+                    name,
                     email,
-                    password
+                    password,
+                    phoneNo
                 });
                 alert('Signup successful! Please log in.');
                 setIsLogin(true);
@@ -56,9 +58,19 @@ const LoginModal = ({ onClose }) => {
                     {!isLogin && (
                         <input
                             type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Username"
+                            value={name}
+                            onChange={(e) => setname(e.target.value)}
+                            placeholder="Name"
+                            className="p-2 border rounded"
+                            required
+                        />
+                    )}
+                    {!isLogin && (
+                        <input
+                            type="text"
+                            value={phoneNo}
+                            onChange={(e) => setPhoneNo(e.target.value)}
+                            placeholder="PhoneNo"
                             className="p-2 border rounded"
                             required
                         />

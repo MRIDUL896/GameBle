@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
         type : String,
         required : true,
     },
+    phoneNo: {
+        type: String,
+        required: true,
+    },
     coins : {
         type : Number,
         default : 100
