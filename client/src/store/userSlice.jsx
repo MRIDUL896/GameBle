@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isLoggedIn: false,
     userInfo: null,
+    page : "games"
 }
 
 export const userSlice = createSlice({
@@ -21,10 +22,13 @@ export const userSlice = createSlice({
             if (state.userInfo) {
                 state.userInfo.balance = action.payload;
             }
+        },
+        updatePage : (state, action) => {
+            state.page = action.payload;
         }
     }
 });
 
-export const { login, logout, updateBalance } = userSlice.actions;
+export const { login, logout, updateBalance, updatePage } = userSlice.actions;
 
 export default userSlice.reducer;

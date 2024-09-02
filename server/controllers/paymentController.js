@@ -10,7 +10,8 @@ const razorpay = new Razorpay({
 
 const createOrder = async (req, res) => {
   try {
-    const {amount} = req.body;
+    const {amount} = req.body.amount;
+    console.log(amount)
     const options = {
       amount: amount, // amount in paise, e.g., 50000 paise = ₹500
       currency: 'INR',

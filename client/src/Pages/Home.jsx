@@ -1,11 +1,17 @@
 import FeaturedGames from "../Components/games/FeaturedGames";
-import RpGateway from "../Components/paymentGateway/RpGateway";
+import Shop from "../paymentGateway/Shop";
+import Support from "../Components/Support"
+import { useSelector } from "react-redux";
+import ProfileCard from "../Components/ProfileCard";
 
 const Home = () => {
+    const { page } = useSelector((state) => state.user);
     return(
         <div className="">
-           { <FeaturedGames/>}
-           {<RpGateway amount={100}/>}
+           {(page==="Games" || page==="Home") && <FeaturedGames/>}
+           {(page==="Promotions" || page==="Home") && <Shop/>}
+           {(page==="Support" || page==="Home") && <Support/>}
+           { (page==="Profile" ) && <ProfileCard/>}
         </div>
     )
 }
