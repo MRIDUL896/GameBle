@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 const database = require('./database/dbConnection');
 const userRouter = require('./routes/userRoutes');
 const cors = require('cors');
@@ -9,8 +10,14 @@ const app = express();
 database();
 dotenv.config();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // Replace with your frontend's URL
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
+app.use(cookieParser());
 app.use('/gameble',userRouter);
 app.use('/gameble/payment',paymentRoutes);
 

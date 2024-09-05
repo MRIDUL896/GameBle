@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { updateBalance } from '../../store/userSlice';
 import mines from '../../assets/mines.webp';
+import api from '../axiosConfig'
 
 const Mines = () => {
     const dispatch = useDispatch();
@@ -70,7 +70,7 @@ const Mines = () => {
         const newBalance = balance + finalReward - betAmount;
 
         try {
-            await axios.put('http://localhost:8000/gameble/updateBalance', {
+            await api.put('/gameble/updateBalance', {
                 email: userInfo.email,
                 newBalance
             });

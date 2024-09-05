@@ -36,7 +36,7 @@ const Support = () => {
             <h2 className="text-2xl font-bold mb-4 text-blue-300">Frequently Asked Questions</h2>
             <ul className="space-y-3">
               {faqItems.map((faq, index) => (
-                <li key={index} className="bg-gray-700 rounded-lg p-4">
+                <li key={index} className="bg-gray-700 hover:bg-slate-600 rounded-lg p-4">
                   <div 
                     onClick={() => toggleFaq(index)} 
                     className="flex justify-between items-center cursor-pointer"

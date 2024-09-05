@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/userSlice';
-import axios from 'axios';
+import api from './axiosConfig'
 
 const LoginModal = ({ onClose }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -17,7 +17,7 @@ const LoginModal = ({ onClose }) => {
             let response;
             if (isLogin) {
                 // Handle login
-                response = await axios.post('http://localhost:8000/gameble/login', {
+                response = await api.post('/gameble/login', {
                     email,
                     password
                 });
@@ -25,7 +25,7 @@ const LoginModal = ({ onClose }) => {
                 onClose();
             } else {
                 // Handle signup
-                response = await axios.post('http://localhost:8000/gameble/signup', {
+                response = await api.post('/gameble/signup', {
                     name,
                     email,
                     password,

@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import api from '../Components/axiosConfig'
 import { useSelector } from 'react-redux';
 
 const RpGateway = ({ amount }) => {
@@ -13,7 +13,7 @@ const RpGateway = ({ amount }) => {
         }
 
         try {
-            const orderResponse = await axios.post(`http://localhost:8000/gameble/payment/create-order`, {
+            const orderResponse = await api.post(`/gameble/payment/create-order`, {
                 amount: amount
             });
             const { data } = orderResponse;
@@ -27,7 +27,7 @@ const RpGateway = ({ amount }) => {
                 order_id: data.id,
                 handler: async function (response) {
                     try {
-                        const verifyResponse = await axios.post(`${process.env._API_URL}/gameble/payment/verify-payment`, response);
+                        const verifyResponse = await api.post(`/gameble/payment/verify-payment`, response);
                         console.log(verifyResponse.data);
                         alert('Payment successful');
                     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import coinFlip from '../../assets/coin_flip.jpeg';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
+import api from '../axiosConfig'
 import { updateBalance } from '../../store/userSlice'; 
 
 const FortuneFlip = () => {
@@ -38,7 +38,7 @@ const FortuneFlip = () => {
             setBalance(newBalance);
 
             try {
-                await axios.put('http://localhost:8000/gameble/updateBalance', {
+                await api.put('/gameble/updateBalance', {
                     email: userInfo.email,
                     newBalance
                 });

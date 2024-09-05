@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Coins } from 'lucide-react';
-import axios from 'axios';
+import api from '../Components/axiosConfig'
 import { useSelector } from 'react-redux';
 
 const Shop = () => {
@@ -21,7 +21,7 @@ const Shop = () => {
         }
         console.log("inside");
         try {
-            const orderResponse = await axios.post(`http://localhost:8000/gameble/payment/create-order`, {
+            const orderResponse = await api.post(`/gameble/payment/create-order`, {
                 amount: selectedAmount
             });
             const { data } = orderResponse;
@@ -35,7 +35,7 @@ const Shop = () => {
                 order_id: data.id,
                 handler: async function (response) {
                     try {
-                        const verifyResponse = await axios.post(`${process.env._API_URL}/gameble/payment/verify-payment`, response);
+                        const verifyResponse = await api.post(`/gameble/payment/verify-payment`, response);
                         console.log(verifyResponse.data);
                         alert('Payment successful');
                     } catch (error) {

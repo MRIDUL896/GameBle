@@ -1,7 +1,14 @@
-const pswdStrength = require('../middlewaares/passwordStrength')
+const pswdStrength = require('../middlewaares/passwordStrength');
 const bcrypt = require('bcrypt');
 const userModel = require('../models/userModel');
-const saltRound = 10;
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
+const generateTokenAndSetCookie = require('../utils/generateToken');
+
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET;
+const saltRound = process.env.SALT;
+
 
 const handleSignup = async (req , res) => {
     let user = req.body;
@@ -21,9 +28,24 @@ const handleSignup = async (req , res) => {
             user.password = hashedPass;
             //creating user
             const newUser = await userModel.create(user);
+            if (newUser) {
+                // Generate JWT token here
+                generateTokenAndSetCookie(newUser._id, res);
+                await newUser.save();
+    
+                res.status(201).json({
+                    _id: newUser._id,
+                    fullName: newUser.fullName,
+                    username: newUser.username,
+                    profilePic: newUser.profilePic,
+                });
+            } else {
+                res.status(400).json({ error: "Invalid user data" });
+            }
             res.status(201).json({ 
                 message: "User created successfully", 
-                userId: newUser._id 
+                userId: newUser._id ,
+                token: token
             });
         }
     }catch(err){
@@ -47,7 +69,8 @@ const handleLogin = async (req,res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ message: "Invalid password" });
         }
-        //success
+        // Create JWT token
+        generateTokenAndSetCookie(user._id, res);
         res.status(200).json({
             message: "Login successful",
             user: {
@@ -70,13 +93,8 @@ const handleLogin = async (req,res) => {
 
 const handleLogout = async (req, res) => {
     try {
-        // If you're using server-side sessions, you might clear the session here
-        // req.session.destroy();
-
-        // If you're using tokens, you typically don't need to do anything server-side
-        // The client should delete the token
-
-        res.status(200).json({ message: "Logout successful" });
+        res.cookie("jwt", "", { maxAge: 0 });
+		res.status(200).json({ message: "Logged out successfully" });
     } catch (err) {
         console.log({"msg" : err});
         res.status(500).json({
@@ -85,23 +103,42 @@ const handleLogout = async (req, res) => {
     }
 }
 
-const handleBalanceUpdate = async (req,res) => {
-    try{
-        const {email , newBalance} = req.body;
-        const user = await userModel.findOne({email});
+const handleBalanceUpdate = async (req, res) => {
+    try {
+        // Check if user is authenticated using both session and JWT
+
+        if (!req.cookies.jwt) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        let userId;
+        const decoded = jwt.verify(req.cookies.jwt, JWT_SECRET);
+        console.log(decoded)
+        if (!decoded) {
+            return res.status(401).json({ message: "Invalid token" });
+        }
+        userId = decoded.userId;
+
+        const { email, newBalance } = req.body;
+        const user = await userModel.findOne({ _id: userId, email: email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         user.coins = newBalance;
         await user.save();
+
         res.status(200).json({
             message: "Balance updated successfully",
             newBalance: user.coins
         });
-    }catch(err){
-        console.log({"msg" : err});
-        res.status(500).json({
-            message: "Error occurred during logout",
+    } catch (err) {
+        console.log({ "msg": err });
+        res.status(500).json({ 
+            message: "Error occurred during balance update",
         });
     }
-}
+};
 
 module.exports = {
     handleSignup,handleLogin,handleLogout,handleBalanceUpdate
