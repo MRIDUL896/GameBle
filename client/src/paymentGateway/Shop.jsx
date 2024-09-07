@@ -19,7 +19,6 @@ const Shop = () => {
             alert('Invalid amount');
             return;
         }
-        console.log("inside");
         try {
             const orderResponse = await api.post(`/gameble/payment/create-order`, {
                 amount: selectedAmount
@@ -62,7 +61,7 @@ const Shop = () => {
     };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 m-8 w-[95%] bg-gray-800 text-gray-100 font-sans rounded-lg">
+    <div className="flex flex-col items-center justify-center p-4 m-8 w-[90%] bg-gray-800 text-gray-100 font-sans rounded-lg">
       <h2 className="text-3xl font-bold mb-4 text-center text-blue-300">Coin Shop</h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-[90%]">
         {coinPackages.map((pkg) => (

@@ -3,6 +3,7 @@ import Shop from "../paymentGateway/Shop";
 import Support from "../Components/Support"
 import { useSelector } from "react-redux";
 import ProfileCard from "../Components/ProfileCard";
+import ChatsPage from "../chats/ChatsPage";
 
 const Home = () => {
     const { page } = useSelector((state) => state.user);
@@ -12,6 +13,7 @@ const Home = () => {
            {(page==="Promotions" || page==="Home") && <Shop/>}
            {(page==="Support" || page==="Home") && <Support/>}
            { (page==="Profile" ) && <ProfileCard/>}
+           { (page==="Chats") && <ChatsPage/> }
         </div>
     )
 }

@@ -6,9 +6,10 @@ import { logout, updatePage } from "../../store/userSlice";
 import { FaBitcoinSign } from "react-icons/fa6";
 
 const Header = () => {
-    const items = ["Home", "Profile", "Games", "Promotions", "Support", "History"];
+    const items = ["Home", "Profile", "Games", "Promotions", "Support", "History", "Chats"];
     const { isLoggedIn, userInfo, page } = useSelector((state) => state.user);
-    console.log('Redux state:', { isLoggedIn, userInfo, page });
+    const info = useSelector((state) => state.user);
+    console.log('Redux state:', info);
     const email = userInfo ? userInfo.email : "";
     const dispatch = useDispatch();
 

@@ -4,10 +4,11 @@ const userModel = require('../models/userModel');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const generateTokenAndSetCookie = require('../utils/generateToken');
+const generateFriendCode = require('../utils/generateFriendCode');
 
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
-const saltRound = process.env.SALT;
+const saltRound = 10;
 
 
 const handleSignup = async (req , res) => {
@@ -31,6 +32,10 @@ const handleSignup = async (req , res) => {
             if (newUser) {
                 // Generate JWT token here
                 generateTokenAndSetCookie(newUser._id, res);
+                const code = generateFriendCode(newUser._id);
+
+                newUser.friendCode = code;
+
                 await newUser.save();
     
                 res.status(201).json({
@@ -38,15 +43,11 @@ const handleSignup = async (req , res) => {
                     fullName: newUser.fullName,
                     username: newUser.username,
                     profilePic: newUser.profilePic,
+                    friendCode : newUser.friendCode
                 });
             } else {
                 res.status(400).json({ error: "Invalid user data" });
             }
-            res.status(201).json({ 
-                message: "User created successfully", 
-                userId: newUser._id ,
-                token: token
-            });
         }
     }catch(err){
         console.log({"msg" : err});
@@ -54,7 +55,7 @@ const handleSignup = async (req , res) => {
             message: "Error occured", 
         });
     }
-}
+};
 
 const handleLogin = async (req,res) => {
     const { email, password } = req.body;
@@ -79,7 +80,11 @@ const handleLogin = async (req,res) => {
                 email: user.email,
                 name : user.name,
                 balance : user.coins,
-                phoneNo : user.phoneNo
+                phoneNo : user.phoneNo,
+                friends : user.friends,
+                friendCode : user.friendCode,
+                incomingFriendRequests : user.incomingFriendRequests,
+                pendingFriendRequests : user.pendingFriendRequests
                 // Add any other user properties you want to include
             }
         });
@@ -89,7 +94,7 @@ const handleLogin = async (req,res) => {
             message: "Error occured", 
         });
     }
-}
+};
 
 const handleLogout = async (req, res) => {
     try {
@@ -101,7 +106,7 @@ const handleLogout = async (req, res) => {
             message: "Error occurred during logout",
         });
     }
-}
+};
 
 const handleBalanceUpdate = async (req, res) => {
     try {
@@ -113,7 +118,6 @@ const handleBalanceUpdate = async (req, res) => {
 
         let userId;
         const decoded = jwt.verify(req.cookies.jwt, JWT_SECRET);
-        console.log(decoded)
         if (!decoded) {
             return res.status(401).json({ message: "Invalid token" });
         }
@@ -140,6 +144,92 @@ const handleBalanceUpdate = async (req, res) => {
     }
 };
 
+const getUsersForSidebar = async (req, res) => {
+	try {
+		const userId = req.user._id;
+
+
+		const userWithFriends = await User.findById(userId).populate('friends', 'name email phoneNo'); // Specify which fields of friends you want to retrieve
+
+		res.status(200).json(userWithFriends);
+	} catch (error) {
+		console.error("Error in getUsersForSidebar: ", error.message);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+const sendFriendRequest = async (req, res) => {
+    try {
+        const { friendCode } = req.body; // The friend code of the user to send the request to
+        const senderId = req.user._id; // The user sending the request
+
+        // Find the user by the friend code
+        const recipient = await userModel.findOne({ friendCode : friendCode });
+        if (!recipient) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if they are already friends
+        if (recipient.friends.includes(senderId)) {
+            return res.status(400).json({ message: "You are already friends" });
+        }
+
+        // Check if a friend request has already been sent
+        if (recipient.incomingFriendRequests.includes(senderId) || recipient.pendingFriendRequests.includes(senderId)) {
+            return res.status(400).json({ message: "Friend request already sent" });
+        }
+
+        // Add to recipient's incoming requests and sender's pending requests
+        recipient.incomingFriendRequests.push(senderId);
+        const sender = await userModel.findById(senderId);
+        sender.pendingFriendRequests.push(recipient._id);
+
+        await Promise.all([await recipient.save(),await sender.save()]);
+
+        res.status(200).json({ message: "Friend request sent" });
+
+    } catch (err) {
+        res.status(500).json({ message: "Error sending friend request", error: err });
+    }
+};
+
+const acceptFriendRequest = async (req, res) => {
+    try {
+        const { requestId } = req.body; // ID of the user whose friend request is being accepted
+        const userId = req.user._id; // The user accepting the request
+
+        // Find both users
+        const user = await userModel.findById(userId);
+        const requester = await userModel.findById(requestId);
+
+        if (!user || !requester) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if the request exists
+        if (!user.incomingFriendRequests.includes(requestId)) {
+            return res.status(400).json({ message: "Friend request not found" });
+        }
+
+        // Add each other to the friends list
+        user.friends.push(requestId);
+        requester.friends.push(userId);
+
+        // Remove the request from incoming and pending lists
+        user.incomingFriendRequests = user.incomingFriendRequests.filter(req => req.toString() !== requestId);
+        requester.pendingFriendRequests = requester.pendingFriendRequests.filter(req => req.toString() !== userId);
+
+        Promise.all([await user.save(),await requester.save()])
+
+        res.status(200).json({ message: "Friend request accepted" });
+        
+    } catch (err) {
+        res.status(500).json({ message: "Error accepting friend request", error: err });
+    }
+};
+
+
+
 module.exports = {
-    handleSignup,handleLogin,handleLogout,handleBalanceUpdate
+    handleSignup,handleLogin,handleLogout,handleBalanceUpdate,getUsersForSidebar,sendFriendRequest,acceptFriendRequest
 }
