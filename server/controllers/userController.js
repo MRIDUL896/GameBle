@@ -1,5 +1,7 @@
 const pswdStrength = require('../middlewaares/passwordStrength');
 const bcrypt = require('bcrypt');
+const conversationModel = require('../models/conversationModel');
+const messageModel = require('../models/messageModel');
 const userModel = require('../models/userModel');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
@@ -50,7 +52,6 @@ const handleSignup = async (req , res) => {
             }
         }
     }catch(err){
-        console.log({"msg" : err});
         res.status(500).json({ 
             message: "Error occured", 
         });
@@ -89,7 +90,6 @@ const handleLogin = async (req,res) => {
             }
         });
     }catch(err){
-        console.log({"msg" : err});
         res.status(500).json({ 
             message: "Error occured", 
         });
@@ -101,7 +101,6 @@ const handleLogout = async (req, res) => {
         res.cookie("jwt", "", { maxAge: 0 });
 		res.status(200).json({ message: "Logged out successfully" });
     } catch (err) {
-        console.log({"msg" : err});
         res.status(500).json({
             message: "Error occurred during logout",
         });
@@ -137,7 +136,6 @@ const handleBalanceUpdate = async (req, res) => {
             newBalance: user.coins
         });
     } catch (err) {
-        console.log({ "msg": err });
         res.status(500).json({ 
             message: "Error occurred during balance update",
         });
@@ -147,11 +145,12 @@ const handleBalanceUpdate = async (req, res) => {
 const getUsersForSidebar = async (req, res) => {
 	try {
 		const userId = req.user._id;
-
-
-		const userWithFriends = await User.findById(userId).populate('friends', 'name email phoneNo'); // Specify which fields of friends you want to retrieve
-
-		res.status(200).json(userWithFriends);
+		const userWithFriends = await userModel.findById(userId).populate('friends', 'name email phoneNo'); // Specify which fields of friends you want to retrieve
+        const friends = userWithFriends.friends;
+        if(friends.length ==0 || !friends){
+            return res.status(200).json({});
+        }
+		res.status(200).json(friends);
 	} catch (error) {
 		console.error("Error in getUsersForSidebar: ", error.message);
 		res.status(500).json({ error: "Internal server error" });
@@ -164,7 +163,7 @@ const sendFriendRequest = async (req, res) => {
         const senderId = req.user._id; // The user sending the request
 
         // Find the user by the friend code
-        const recipient = await userModel.findOne({ friendCode : friendCode });
+        const recipient = await userModel.findOne({ friendCode });
         if (!recipient) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -228,8 +227,52 @@ const acceptFriendRequest = async (req, res) => {
     }
 };
 
+const getConversations = async (req, res) => {
+    try {
+        const userId = req.user._id;
 
+        const conversations = await conversationModel.find({ participants: userId })
+            .populate({
+                path: 'participants',
+                select: 'name email phoneNo'
+            })
+            .populate({
+                path: 'messages',
+                options: { sort: { createdAt: -1 }, limit: 1 }
+            })
+            .sort({ 'messages.createdAt': -1 });
+
+        const result = conversations.map(conversation => {
+            const latestMessage = conversation.messages[0];
+            const otherParticipant = conversation.participants.find(p => p._id.toString() !== userId.toString());
+
+            return {
+                conversationId: conversation._id,
+                participant: otherParticipant,
+                latestMessage: latestMessage ? {
+                    message: latestMessage.message,
+                    senderId: latestMessage.senderId,
+                    createdAt: latestMessage.createdAt
+                } : null
+            };
+        });
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Error fetching conversations:", err.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+const incomingFriendRequests = async(req,res) => {
+    const userId = req.user._id;
+	const requests = await userModel.findById(userId).populate('incomingFriendRequests', 'name email phoneNo');
+    if(requests.length ==0 || !requests){
+        return res.status(200).json({});
+    }
+    res.status(200).json(requests);
+}
 
 module.exports = {
-    handleSignup,handleLogin,handleLogout,handleBalanceUpdate,getUsersForSidebar,sendFriendRequest,acceptFriendRequest
+    handleSignup,handleLogin,handleLogout,handleBalanceUpdate,getUsersForSidebar,sendFriendRequest,acceptFriendRequest,getConversations,incomingFriendRequests
 }

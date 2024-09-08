@@ -17,12 +17,12 @@ const userSchema = new mongoose.Schema({
     phoneNo: {
         type: String,
         required: true,
-        validate: {
-            validator: function(v) {
-                return /\d{10}/.test(v);  // Example validation for a 10-digit number
-            },
-            message: props => `${props.value} is not a valid phone number!`
-        }
+        // validate: {
+        //     validator: function(v) {
+        //         return /\d{10}/.test(v);  // Example validation for a 10-digit number
+        //     },
+        //     message: props => `${props.value} is not a valid phone number!`
+        // }
     },
     coins : {
         type : Number,

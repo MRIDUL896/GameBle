@@ -1,9 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 const initialState = {
     isLoggedIn: false,
     userInfo: null,
-    page : "games"
+    page : "games",
+    currentChating : ""
 }
 
 export const userSlice = createSlice({
@@ -25,10 +26,13 @@ export const userSlice = createSlice({
         },
         updatePage : (state, action) => {
             state.page = action.payload;
+        },
+        updateCurrentChating : (state,action) => {
+            state.currentChating = action.payload;
         }
     }
 });
 
-export const { login, logout, updateBalance, updatePage } = userSlice.actions;
+export const { login, logout, updateBalance, updatePage, updateCurrentChating } = userSlice.actions;
 
 export default userSlice.reducer;
