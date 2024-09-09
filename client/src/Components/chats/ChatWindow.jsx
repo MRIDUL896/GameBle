@@ -20,7 +20,7 @@ const ChatWindow = ( ) => {
         };
         
         changeChat();
-    }, [currentChating]);
+    },[]);
 
     return (
         <div className="chat-window h-full overflow-y-auto">

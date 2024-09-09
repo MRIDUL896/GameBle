@@ -270,7 +270,7 @@ const incomingFriendRequests = async(req,res) => {
     if(requests.length ==0 || !requests){
         return res.status(200).json({});
     }
-    res.status(200).json(requests);
+    res.status(200).json(requests.incomingFriendRequests);
 }
 
 module.exports = {

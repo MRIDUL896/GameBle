@@ -14,7 +14,13 @@ const ChatsPage = () => {
         else setCurr(val);
     }
 
-    const { friends = [], incomingFriendRequests = [], pendingFriendRequests = [],chats = [] } = useSelector((state) => state.user.userInfo);
+    const userInfo = useSelector((state) => state.user?.userInfo || {});
+    const {
+        friends = [],
+        incomingFriendRequests = [],
+        pendingFriendRequests = [],
+        chats = []
+    } = userInfo;
 
     return (
         <div className="flex flex-col items-center justify-center p-4 m-8 w-[90%] bg-gray-800 text-gray-100 font-sans rounded-lg">
@@ -39,7 +45,7 @@ const ChatsPage = () => {
                 onClick={() => handleClick("Friends")}>
                     <h3 className="text-xl text-blue-200 mb-2">Friends</h3>
                     <FaUserFriends className="mx-auto mb-2 text-green-400" size={32} />
-                    {friends.length > 0 ? (
+                    {friends!==null  && friends.length > 0 ? (
                         <p className="text-gray-300">See friends</p>
                     ) : (
                         <p className="text-gray-300">No friends found</p>
