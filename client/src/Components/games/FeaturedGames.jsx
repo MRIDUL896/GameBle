@@ -7,20 +7,21 @@ const FeaturedGames = () => {
     const games = [
         { id: 1, name: "Fortune Flip", image: coin, category: "Double or Nothing",link : "/fortuneflip" },
         { id: 2, name: "Mines", image: mines, category: "Grid Games" , link : "/mines"},
-        { id: 3, name: "Lucky Roulette", image: "path/to/roulette-image.jpg", category: "Table Games" , link : "/" },
+        { id: 3, name: "Lucky Roulette", image: "path/to/roulette-image.jpg", category: "Table Games" , link : "/roulette" },
         { id: 4, name: "Poker Night", image: "path/to/poker-image.jpg", category: "Poker", link : "/" },
     ];
 
     return (
-        <div className="bg-gray-900 px-8 pb-4">
+        <div className="bg-gray-800 p-8 w-[95%] rounded-xl">
             <div className="container mx-auto">
                 <h2 className="text-3xl font-bold text-white mb-6">Featured Games</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-blue-200">
                     {games.map((game) => (
-                        <div key={game.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105">
+                        <div key={game.id} className="bg-gray-950 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105
+                        hover:border-2 hover:border-purple-900">
                             <img src={game.image} alt={game.name} className="w-full h-48 object-cover" />
                             <div className="p-4">
-                                <h3 className="text-xl font-semibold text-white mb-2">{game.name}</h3>
+                                <h3 className="text-xl font-semibold  mb-2">{game.name}</h3>
                                 <p className="text-gray-400">{game.category}</p>
                                 <a href={game.link}>
                                     <button className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300">

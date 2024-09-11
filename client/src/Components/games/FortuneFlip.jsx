@@ -70,7 +70,7 @@ const FortuneFlip = () => {
                             <button
                                 key={amount}
                                 onClick={() => handleBet(amount)}
-                                className={`px-4 py-2 rounded ${betAmount === amount ? 'bg-blue-600' : 'bg-gray-700'}`}
+                                className={`px-4 py-2 rounded ${betAmount === amount ? 'bg-blue-600' : 'bg-gray-950'}`}
                             >
                                 ${amount}
                             </button>

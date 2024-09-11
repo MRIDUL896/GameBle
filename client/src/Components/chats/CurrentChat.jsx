@@ -10,7 +10,7 @@ const CurrentChat = ({ selectedConversationId }) => {
     };
 
     return (
-        <div className="flex-1 bg-gray-900 text-gray-100 p-6 md:flex flex-col justify-between rounded-r-2xl hidden ">
+        <div className="flex-1 bg-gray-950 text-gray-100 p-6 md:flex flex-col justify-between rounded-r-2xl hidden ">
             <ChatWindow selectedConversationId={selectedConversationId} />
             <div className="flex items-center p-4 border-t border-gray-600">
                 <input

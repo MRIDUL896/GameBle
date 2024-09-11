@@ -10,7 +10,7 @@ import Mines from "./Components/games/Mines";
 function App() {
   const { isLoggedIn } = useSelector((state) => state.user);
   return (
-    <div className="bg-slate-900">
+    <div className="bg-gray-950">
       <Header/>
       <BrowserRouter>
         <Routes>

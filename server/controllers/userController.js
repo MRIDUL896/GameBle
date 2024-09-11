@@ -147,9 +147,6 @@ const getUsersForSidebar = async (req, res) => {
 		const userId = req.user._id;
 		const userWithFriends = await userModel.findById(userId).populate('friends', 'name email phoneNo'); // Specify which fields of friends you want to retrieve
         const friends = userWithFriends.friends;
-        if(friends.length ==0 || !friends){
-            return res.status(200).json({});
-        }
 		res.status(200).json(friends);
 	} catch (error) {
 		console.error("Error in getUsersForSidebar: ", error.message);
@@ -161,7 +158,6 @@ const sendFriendRequest = async (req, res) => {
     try {
         const { friendCode } = req.body; // The friend code of the user to send the request to
         const senderId = req.user._id; // The user sending the request
-
         // Find the user by the friend code
         const recipient = await userModel.findOne({ friendCode });
         if (!recipient) {
@@ -175,7 +171,7 @@ const sendFriendRequest = async (req, res) => {
 
         // Check if a friend request has already been sent
         if (recipient.incomingFriendRequests.includes(senderId) || recipient.pendingFriendRequests.includes(senderId)) {
-            return res.status(400).json({ message: "Friend request already sent" });
+            return res.status(200).json({ message: "Friend request already sent" });
         }
 
         // Add to recipient's incoming requests and sender's pending requests
@@ -194,7 +190,7 @@ const sendFriendRequest = async (req, res) => {
 
 const acceptFriendRequest = async (req, res) => {
     try {
-        const { requestId } = req.body; // ID of the user whose friend request is being accepted
+        const requestId = req.body.id; // ID of the user whose friend request is being accepted
         const userId = req.user._id; // The user accepting the request
 
         // Find both users
@@ -216,51 +212,16 @@ const acceptFriendRequest = async (req, res) => {
 
         // Remove the request from incoming and pending lists
         user.incomingFriendRequests = user.incomingFriendRequests.filter(req => req.toString() !== requestId);
-        requester.pendingFriendRequests = requester.pendingFriendRequests.filter(req => req.toString() !== userId);
+        requester.pendingFriendRequests = requester.pendingFriendRequests.filter(req => {
+            return !req.equals(userId);
+        });
 
-        Promise.all([await user.save(),await requester.save()])
+        Promise.all([user.save(),requester.save()]);
 
         res.status(200).json({ message: "Friend request accepted" });
         
     } catch (err) {
         res.status(500).json({ message: "Error accepting friend request", error: err });
-    }
-};
-
-const getConversations = async (req, res) => {
-    try {
-        const userId = req.user._id;
-
-        const conversations = await conversationModel.find({ participants: userId })
-            .populate({
-                path: 'participants',
-                select: 'name email phoneNo'
-            })
-            .populate({
-                path: 'messages',
-                options: { sort: { createdAt: -1 }, limit: 1 }
-            })
-            .sort({ 'messages.createdAt': -1 });
-
-        const result = conversations.map(conversation => {
-            const latestMessage = conversation.messages[0];
-            const otherParticipant = conversation.participants.find(p => p._id.toString() !== userId.toString());
-
-            return {
-                conversationId: conversation._id,
-                participant: otherParticipant,
-                latestMessage: latestMessage ? {
-                    message: latestMessage.message,
-                    senderId: latestMessage.senderId,
-                    createdAt: latestMessage.createdAt
-                } : null
-            };
-        });
-
-        res.status(200).json(result);
-    } catch (err) {
-        console.error("Error fetching conversations:", err.message);
-        res.status(500).json({ message: "Internal server error" });
     }
 };
 
@@ -273,6 +234,16 @@ const incomingFriendRequests = async(req,res) => {
     res.status(200).json(requests.incomingFriendRequests);
 }
 
+const pendingFriendRequests = async(req,res) => {
+    const userId = req.user._id;
+	const requests = await userModel.findById(userId).populate('pendingFriendRequests', 'name email phoneNo');
+    if(requests.length ==0 || !requests){
+        return res.status(200).json({});
+    }
+    res.status(200).json(requests.pendingFriendRequests);
+}
+
 module.exports = {
-    handleSignup,handleLogin,handleLogout,handleBalanceUpdate,getUsersForSidebar,sendFriendRequest,acceptFriendRequest,getConversations,incomingFriendRequests
+    handleSignup,handleLogin,handleLogout,handleBalanceUpdate,getUsersForSidebar,sendFriendRequest,acceptFriendRequest,incomingFriendRequests,
+    pendingFriendRequests
 }

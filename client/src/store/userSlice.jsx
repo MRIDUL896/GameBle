@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isLoggedIn: false,
@@ -19,6 +19,12 @@ export const userSlice = createSlice({
             state.isLoggedIn = false;
             state.userInfo = null;
         },
+        updateFriends : (state,action) => {
+            if(state.userInfo) state.userInfo.friends = action.payload;
+        },
+        updatePendingFriendRequests : (state,action) => {
+            if(state.userInfo) state.userInfo.pendingFriendRequests = action.payload;
+        },
         updateBalance: (state, action) => {
             if (state.userInfo) {
                 state.userInfo.balance = action.payload;
@@ -29,10 +35,12 @@ export const userSlice = createSlice({
         },
         updateCurrentChating : (state,action) => {
             state.currentChating = action.payload;
-        }
+        },
     }
 });
 
-export const { login, logout, updateBalance, updatePage, updateCurrentChating } = userSlice.actions;
+export const { login, logout, updateBalance, updatePage, updateCurrentChating,updateFriends,
+    updatePendingFriendRequests
+} = userSlice.actions;
 
 export default userSlice.reducer;

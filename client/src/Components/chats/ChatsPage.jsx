@@ -4,6 +4,8 @@ import { FaUserFriends, FaPaperPlane, FaEnvelopeOpenText, FaUserPlus } from 'rea
 import FriendsList from './FriendsList';
 import ChatsHome from './ChatsHome';
 import IncomingRequests from './IncomingRequests';
+import PendingRequests from './PendingRequests';
+import SendRequest from './SendRequest';
 
 const ChatsPage = () => {
 
@@ -29,7 +31,7 @@ const ChatsPage = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 w-[90%]">
                 
                 {/* Chats Section */}
-                <div className="bg-gray-700 cursor-pointer hover:bg-gray-600 rounded-lg p-4 text-center transition-transform duration-300 hover:scale-105"
+                <div className="flex flex-col justify-center items-center bg-gray-950 cursor-pointer hover:bg-gray-600 rounded-lg p-4 text-center transition-transform duration-300 hover:scale-105"
                 onClick={() => handleClick("Chats")}>
                     <h3 className="text-xl text-blue-200 mb-2">Chats</h3>
                     <FaEnvelopeOpenText className="mx-auto mb-2 text-blue-400" size={32} />
@@ -41,7 +43,7 @@ const ChatsPage = () => {
                 </div>
 
                 {/* Friends Section */}
-                <div className="bg-gray-700 cursor-pointer hover:bg-gray-600 rounded-lg p-4 text-center transition-transform duration-300 hover:scale-105"
+                <div className="flex flex-col justify-center items-center bg-gray-950 cursor-pointer hover:bg-gray-600 rounded-lg p-4 text-center transition-transform duration-300 hover:scale-105"
                 onClick={() => handleClick("Friends")}>
                     <h3 className="text-xl text-blue-200 mb-2">Friends</h3>
                     <FaUserFriends className="mx-auto mb-2 text-green-400" size={32} />
@@ -53,7 +55,7 @@ const ChatsPage = () => {
                 </div>
 
                 {/* Incoming Friend Requests Section */}
-                <div className="bg-gray-700 cursor-pointer hover:bg-gray-600 transition-transform duration-300 hover:scale-105 rounded-lg p-4 text-center"
+                <div className="flex flex-col justify-center items-center bg-gray-950 cursor-pointer hover:bg-gray-600 transition-transform duration-300 hover:scale-105 rounded-lg p-4 text-center"
                 onClick={() => handleClick("Incoming")}>
                     <h3 className="text-xl text-blue-200 mb-2">Incoming Friend Requests</h3>
                     <FaUserPlus className="mx-auto mb-2 text-yellow-400" size={32} />
@@ -65,13 +67,15 @@ const ChatsPage = () => {
                 </div>
 
                 {/* Send Friend Requests Section */}
-                <div className= "flex flex-col cursor-pointer justify-center items-center gap-10 bg-gray-700 hover:bg-gray-600 transition-transform duration-300 hover:scale-105 rounded-lg p-4 text-center">
+                <div className= "flex flex-col justify-center items-center cursor-pointer bg-gray-950 hover:bg-gray-600 transition-transform duration-300 hover:scale-105 rounded-lg p-4 text-center"
+                onClick={() => handleClick("SendReq")}>
                     <h3 className="text-xl text-blue-200 mb-2">Send Friend Requests</h3>
                     <FaPaperPlane className="mx-auto mb-2 text-red-400" size={32} />
                 </div>
 
                 {/* Your Pending Requests */}
-                <div className="bg-gray-700 cursor-pointer hover:bg-gray-600 rounded-lg p-4 text-center transition-transform duration-300 hover:scale-105">
+                <div className="bg-gray-950 cursor-pointer hover:bg-gray-600 rounded-lg p-4 text-center transition-transform duration-300 hover:scale-105"
+                onClick={() => handleClick("Pending")}>
                     <h3 className="text-xl text-blue-200 mb-2">Pending Requests</h3>
                     <FaEnvelopeOpenText className="mx-auto mb-2 text-blue-400" size={32} />
                     {pendingFriendRequests.length > 0 ? (
@@ -85,6 +89,8 @@ const ChatsPage = () => {
             {curr === "Friends" && <FriendsList/>}
             {curr === "Chats" && <ChatsHome/>}
             {curr === "Incoming" && <IncomingRequests/>}
+            {curr === "Pending" && <PendingRequests/>}
+            {curr === "SendReq" && <SendRequest/>}
         </div>
     );
 };

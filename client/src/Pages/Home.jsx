@@ -8,10 +8,10 @@ import ChatsPage from "../Components/chats/ChatsPage";
 const Home = () => {
     const { page } = useSelector((state) => state.user);
     return(
-        <div className="">
-           {(page==="Games" || page==="Home") && <FeaturedGames/>}
-           {(page==="Promotions" || page==="Home") && <Shop/>}
-           {(page==="Support" || page==="Home") && <Support/>}
+        <div className="bg-gray-950 flex flex-col justify-center items-center">
+           {(page==="Games" || page==="Home" || page==="none") && <FeaturedGames/>}
+           {(page==="Promotions" || page==="Home" || page==="none") && <Shop/>}
+           {(page==="Support" || page==="Home" || page==="none") && <Support/>}
            { (page==="Profile" ) && <ProfileCard/>}
            { (page==="Chats") && <ChatsPage/> }
         </div>
