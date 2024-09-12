@@ -1,17 +1,28 @@
 import { useState } from 'react';
 import ChatWindow from './ChatWindow';
+import { useSelector } from 'react-redux';
+import api from '../axiosConfig';
 
-const CurrentChat = ({ selectedConversationId }) => {
+const CurrentChat = () => {
+    const {currentChating} = useSelector((state) => state.user);
     const [message, setMessage] = useState('');
     const [sending, setSending] = useState(false);
 
     const sendMessage = async () => {
-        
+        setSending(true);
+        await api.post(`/gameble/message/sendMessage/${currentChating}`,{
+            message
+        }).then((response) => {
+            setMessage('')
+        }).catch((err) => {
+            console.log(err);
+        })
+        setSending(false)
     };
 
     return (
         <div className="flex-1 bg-gray-950 text-gray-100 p-6 md:flex flex-col justify-between rounded-r-2xl hidden ">
-            <ChatWindow selectedConversationId={selectedConversationId} />
+            <ChatWindow/>
             <div className="flex items-center p-4 border-t border-gray-600">
                 <input
                     type="text"

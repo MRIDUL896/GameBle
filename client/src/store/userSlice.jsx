@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isLoggedIn: false,
     userInfo: null,
+    otherUserInfo: 'x',
     page : "games",
     currentChating : ""
 }
@@ -36,6 +37,9 @@ export const userSlice = createSlice({
         updateCurrentChating : (state,action) => {
             state.currentChating = action.payload;
         },
+        updateOtherUserInfo : (state,action) => {
+            state.otherUserInfo = action.payload;
+        }
     }
 });
 

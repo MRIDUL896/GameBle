@@ -15,7 +15,6 @@ const PendingRequests = () => {
             try {
                 await api.get('/gameble/getPendingRequests').then((response) => {
                     setReqList(response.data);
-                    console.log(response.data)
                     dispatch(updatePendingFriendRequests(response.data));
                     setLoading(false);
                 })

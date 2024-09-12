@@ -4,24 +4,31 @@ const Message = require('../models/messageModel');
 const sendMessage = async (req,res) => {
     try{
         const {message} = req.body;
-        const { id : recieverId} = req.params;
+        const { id : convoId} = req.params;
         const senderId = req.user._id;
-        
+
         let convo = await Conversation.findOne({
-            participants : {$all : [senderId , recieverId]}
+            _id : convoId
         })
 
+
+        const receiverId = convo.participants[0] === senderId ? convo.participants[1] : convo.participants[1];
+
         if(!convo){
+            console.log("err");
+            res.json({msg : "err"})
             convo = await Conversation.create({
-                participants : [senderId , recieverId]
+                participants : [senderId , receiverId]
+            }).catch((err) => {
+                res.status(404).json({msg : "could not perform the action"})
             });
         }
 
-        const newMessage = new Message({
+        const newMessage = await Message.create({
             senderId,
-            recieverId,
-            message,
-        });
+            receiverId,
+            message
+        })
 
         if(newMessage){
             convo.messages.push(newMessage._id);
@@ -29,12 +36,12 @@ const sendMessage = async (req,res) => {
 
         await Promise.all([convo.save(),newMessage.save()]);
 
-        //Socket implemeted here
+        // Socket implemeted here
 
         res.status(201).json({message : "message sent successfully"});
 
     }catch(err){
-        res.status(500).json({ "msg" : "erroe" });
+        res.status(500).json({ "msg" : "error" });
     }
 }
 

@@ -188,6 +188,75 @@ const sendFriendRequest = async (req, res) => {
     }
 };
 
+const getUserConversations = async (req, res) => {
+    try {
+        const userId = req.user._id; // The logged-in user's ID
+
+        // Find all conversations where the user is a participant
+        const conversations = await conversationModel.find({
+            participants: userId
+        }).populate({
+            path: 'participants',
+            select: 'name',  // Only select the name of participants
+            match: { _id: { $ne: userId } }  // Only return the other user (not the logged-in user)
+        }).populate({
+            path: 'messages',
+            select: 'content createdAt',  // Select message content and timestamp
+        });
+
+        if (!conversations.length) {
+            return res.status(404).json({ message: "No conversations found" });
+        }
+
+        // Format the response to include only the necessary details
+        const conversationList = conversations.map(convo => {
+            const otherUser = convo.participants.find(participant => participant._id.toString() !== userId);
+            return {
+                conversationId: convo._id,
+                otherUser: otherUser ? otherUser.name : "Unknown",  // Handle cases where the other user is not found
+                messages: convo.messages.map(message => ({
+                    messageId: message._id,
+                    content: message.content,
+                    timestamp: message.createdAt,
+                })),
+                updatedAt: convo.updatedAt 
+            };
+        });
+
+        res.status(200).json(conversationList);
+
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching conversations", error: err });
+    }
+};
+
+
+const findConversation = async (req, res) => {
+    try {
+        const convoId = req.params.id;
+
+        // Find the conversation and populate the messages
+        const conversation = await conversationModel.findOne({
+            _id: convoId
+        }).populate({
+            path: 'messages',  // Populate the messages
+            populate: { path: 'senderId receiverId updatedAt', select: 'name email' }  // Optionally, populate sender and receiver details
+        });
+
+        if (!conversation) {
+            return res.status(404).json({ message: "No conversation found between the two users" });
+        }
+
+        // Send conversation details along with messages
+        res.status(200).json(conversation);
+
+    } catch (err) {
+        res.status(500).json({ message: "Error fetching conversation", error: err });
+    }
+};
+
+
+
 const acceptFriendRequest = async (req, res) => {
     try {
         const requestId = req.body.id; // ID of the user whose friend request is being accepted
@@ -216,34 +285,63 @@ const acceptFriendRequest = async (req, res) => {
             return !req.equals(userId);
         });
 
-        Promise.all([user.save(),requester.save()]);
+        // Create a new conversation between the participants (user and requester)
+        const conversation = await conversationModel.create({
+            participants: [userId, requestId]
+        });
 
-        res.status(200).json({ message: "Friend request accepted" });
+        // Add the conversation ID to both the user and requester's `convers` array
+        user.convers.push(conversation._id);
+        requester.convers.push(conversation._id);
+
+        // Save both users and the conversation in parallel
+        await Promise.all([user.save(), requester.save()]);
+        res.status(200).json(conversation);
         
     } catch (err) {
         res.status(500).json({ message: "Error accepting friend request", error: err });
     }
 };
 
+
 const incomingFriendRequests = async(req,res) => {
-    const userId = req.user._id;
-	const requests = await userModel.findById(userId).populate('incomingFriendRequests', 'name email phoneNo');
-    if(requests.length ==0 || !requests){
-        return res.status(200).json({});
+    try{
+        const userId = req.user._id;
+        const requests = await userModel.findById(userId).populate('incomingFriendRequests', 'name email phoneNo');
+        if(requests.length ==0 || !requests){
+            return res.status(200).json({});
+        }
+        res.status(200).json(requests.incomingFriendRequests);
+    }catch (err) {
+        res.status(500).json({ message: "Error occured", error: err });
     }
-    res.status(200).json(requests.incomingFriendRequests);
 }
 
 const pendingFriendRequests = async(req,res) => {
-    const userId = req.user._id;
-	const requests = await userModel.findById(userId).populate('pendingFriendRequests', 'name email phoneNo');
-    if(requests.length ==0 || !requests){
-        return res.status(200).json({});
+    try{
+        const userId = req.user._id;
+        const requests = await userModel.findById(userId).populate('pendingFriendRequests', 'name email phoneNo');
+        if(requests.length ==0 || !requests){
+            return res.status(200).json({});
+        }
+        res.status(200).json(requests.pendingFriendRequests);
+    }catch(err){
+        res.status(500).json({ message: "Error occured", error: err });
     }
-    res.status(200).json(requests.pendingFriendRequests);
+}
+
+const getInfo = async (req,res) => {
+    try{
+        const {id : userInfoId} = req.params;
+        const user = await userModel.findOne({_id : userInfoId});
+        if(!user) return res.status(404).json({ message: "Not found", error: err });
+        res.status(200).json(user);
+    }catch(err){
+        res.status(500).json({ message: "Error occured", error: err });
+    }
 }
 
 module.exports = {
     handleSignup,handleLogin,handleLogout,handleBalanceUpdate,getUsersForSidebar,sendFriendRequest,acceptFriendRequest,incomingFriendRequests,
-    pendingFriendRequests
+    pendingFriendRequests, findConversation, getUserConversations,getInfo
 }

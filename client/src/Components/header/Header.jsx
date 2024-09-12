@@ -9,7 +9,6 @@ const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const items = ["Home", "Chats", "Profile", "Games", "Promotions", "Support", "History"];
     const { isLoggedIn, userInfo, page } = useSelector((state) => state.user);
-    console.log(userInfo)
     const email = userInfo ? userInfo.email : "";
     const dispatch = useDispatch();
 
