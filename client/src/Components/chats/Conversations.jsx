@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import api from '../axiosConfig';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentChating } from '../../store/userSlice';
+import { useSocketContext } from '../../context/SocketContext';
 
 const Conversations = () => {
-    const {currentChating} = useSelector((state) => state.user);
+    const { currentChating } = useSelector((state) => state.user);
     const [conversations, setConversations] = useState([]);
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
+    const { onlineUsers } = useSocketContext();
+    // console.log(onlineUsers)
 
     const formatDate = (dateString) => {
         if (!dateString) return "No date available";
@@ -23,7 +26,7 @@ const Conversations = () => {
     }
 
     const handleChatClick = (conversationId) => {
-        if(conversationId === currentChating)  dispatch(updateCurrentChating(""))
+        if (conversationId === currentChating) dispatch(updateCurrentChating(""))
         dispatch(updateCurrentChating(conversationId));
     }
 
@@ -33,12 +36,12 @@ const Conversations = () => {
             await api.get('/gameble/getConversations').then((convos) => {
                 setConversations(convos.data);
                 setLoading(false);
-            }).catch((err) =>{
+            }).catch((err) => {
                 console.log(err)
             });
         }
         getConvo();
-    }, [])
+    }, [onlineUsers])
 
     if (loading) return <p>Loading conversations...</p>;
 
@@ -50,7 +53,13 @@ const Conversations = () => {
                     className={`p-4 hover:bg-gray-600 rounded-lg cursor-pointer flex items-center space-x-3
                     ${currentChating === conversation.conversationId ? "bg-gray-600" : " bg-gray-950"}`}
                     onClick={() => handleChatClick(conversation.conversationId)}>
+                    <div>
+                    {
+                        onlineUsers.includes(conversation.otherUserId) &&
+                        <div className="bg-green-600 h-4 w-4 rounded-full"></div>
+                    }
                     <div className="bg-gray-500 rounded-full w-12 h-12"></div>
+                    </div>
                     <div>
                         <h3 className="font-semibold text-blue-200">{conversation.otherUser}</h3>
                         <span>{formatDate(conversation.updatedAt)}</span>

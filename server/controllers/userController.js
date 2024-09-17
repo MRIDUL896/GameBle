@@ -197,7 +197,7 @@ const getUserConversations = async (req, res) => {
             participants: userId
         }).populate({
             path: 'participants',
-            select: 'name',  // Only select the name of participants
+            // select: 'name, _id',  // Only select the name of participants
             match: { _id: { $ne: userId } }  // Only return the other user (not the logged-in user)
         }).populate({
             path: 'messages',
@@ -213,6 +213,7 @@ const getUserConversations = async (req, res) => {
             const otherUser = convo.participants.find(participant => participant._id.toString() !== userId);
             return {
                 conversationId: convo._id,
+                otherUserId : otherUser ? otherUser._id : "",
                 otherUser: otherUser ? otherUser.name : "Unknown",  // Handle cases where the other user is not found
                 messages: convo.messages.map(message => ({
                     messageId: message._id,
