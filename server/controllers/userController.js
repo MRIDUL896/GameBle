@@ -79,6 +79,7 @@ const handleLogin = async (req,res) => {
         }
         // Create JWT token
         generateTokenAndSetCookie(user._id, res);
+        const token = generateTokenAndSetCookie(newUser._id, res);
         res.status(200).json({
             message: "Login successful",
             user: {
@@ -91,7 +92,8 @@ const handleLogin = async (req,res) => {
                 friends : user.friends,
                 friendCode : user.friendCode,
                 incomingFriendRequests : user.incomingFriendRequests,
-                pendingFriendRequests : user.pendingFriendRequests
+                pendingFriendRequests : user.pendingFriendRequests,
+                token : token
                 // Add any other user properties you want to include
             }
         });
