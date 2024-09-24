@@ -12,9 +12,9 @@ const generateTokenAndSetCookie = (userId, res) => {
 
     res.cookie("jwt", token, {
         maxAge: 15 * 24 * 60 * 60 * 1000,
-        // httpOnly: true,  // Prevents client-side access to the cookie
+        httpOnly: true,  // Prevents client-side access to the cookie
         secure: true,  // Set to true if in production
-        sameSite: 'strict',  // Controls cookie sharing across sites
+		path: '/',  // Cookie is accessible on all routes
     });
 	return token
 };
