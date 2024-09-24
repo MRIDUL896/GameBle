@@ -23,7 +23,7 @@ const LoginModal = ({ onClose }) => {
                 });
                 const { token } = response.data;
                 console.log(response.data)
-                console.log(response)
+                console.log(token)
                 // Set the JWT token in a cookie
                 setCookie('jwt', token, 15);
                 dispatch(login(response.data.user));
