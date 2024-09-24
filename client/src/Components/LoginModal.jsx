@@ -24,8 +24,8 @@ const LoginModal = ({ onClose }) => {
                 const { token } = response.data;
                 console.log(response.data)
                 console.log(token)
-                // Set the JWT token in a cookie
-                setCookie('jwt', token, 15);
+                const jwt = getCookie('jwt');
+                console.log('JWT Cookie:', jwt);
                 dispatch(login(response.data.user));
                 onClose();
             } else {
@@ -54,11 +54,6 @@ const LoginModal = ({ onClose }) => {
             }
         }
     };
-    
-    const setCookie = (name, value, days) => {
-        const expirationDate = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
-        document.cookie = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/; secure; httpOnly`;
-      };
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
