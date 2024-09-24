@@ -15,12 +15,7 @@ const {app , server} =  require('./socket/socket')
 database();
 dotenv.config();
 
-app.use(cors({
-    origin: "https://game-ble-i737-git-main-mriduls-projects-81891b06.vercel.app/", // Replace with your client's URL
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use('/gameble',userRouter);
