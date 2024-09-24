@@ -15,7 +15,6 @@ const FriendsList = () => {
             try {
                 await api.get('/gameble/getFriends').then((response) => {
                     setFriendsList(response.data); // assuming response.data holds the array of friends
-                    console.log(response.data)
                     dispatch(updateFriends(response.data))
                     setLoading(false);
                 })

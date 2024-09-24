@@ -16,7 +16,6 @@ const generateTokenAndSetCookie = (userId, res) => {
         secure: true,  // Set to true if in production
 		path: '/',  // Cookie is accessible on all routes
     });
-	return token
 };
 
 module.exports = generateTokenAndSetCookie;

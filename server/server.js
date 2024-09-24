@@ -12,7 +12,7 @@ database();
 dotenv.config();
 
 app.use(cors({
-    origin: "https://gameable-frontend.onrender.com", // Allow requests from this origin
+    origin: "https://gameable.onrender.com", // Allow requests from this origin
     credentials: true, // Allow credentials (cookies, etc.)
 }));
 app.use(express.json());
