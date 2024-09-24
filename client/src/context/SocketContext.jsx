@@ -16,7 +16,7 @@ export const SocketContextProvider = ({ children }) => {
 
     useEffect(() => {
         if(userInfo){
-            const socket = io("http://localhost:8000",{
+            const socket = io("https://gameable.onrender.com",{
                 query:{
                     userId : userInfo?.id
                 }
