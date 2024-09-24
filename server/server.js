@@ -17,7 +17,7 @@ dotenv.config();
 
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with your frontend's URL
+    origin: 'http://localhost:3000', // Replace with your client's URL
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -28,10 +28,10 @@ app.use('/gameble',userRouter);
 app.use('/gameble/payment',paymentRoutes);
 app.use('/gameble/message',messageRoutes);
 
-app.use(express.static(path.join(__dirname,"/frontend/dist")))
+app.use(express.static(path.join(__dirname,"/client/dist")))
 
 app.get("*", (req,res) => {
-    res.sendFile(path.join(__dirname,"frontend","dist","index.html"))
+    res.sendFile(path.join(__dirname,"client","dist","index.html"))
 })
 const port = (process.env.PORT) ? process.env.PORT : 8000;
 server.listen(port , () => {
