@@ -50,7 +50,7 @@ const handleSignup = async (req , res) => {
                     fullName: newUser.fullName,
                     username: newUser.username,
                     profilePic: newUser.profilePic,
-                    friendCode : newUser.friendCode
+                    friendCode : newUser.friendCode,
                 });
             } else {
                 res.status(400).json({ error: "Invalid user data" });
