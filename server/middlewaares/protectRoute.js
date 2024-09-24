@@ -4,6 +4,7 @@ const userModel = require('../models/userModel')
 const protectRoute = async (req,res,next) => {
     try{
         const token = req.cookies.jwt;
+        console.log(token)
         if(!token){
             return res.status(401).json({err : "Unauthorised"});
         }
