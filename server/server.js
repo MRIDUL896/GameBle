@@ -15,9 +15,8 @@ const {app , server} =  require('./socket/socket')
 database();
 dotenv.config();
 
-const allowedOrigins = ['https://gameble-9.onrender.com', 'https://gameble-10.onrender.com'];
 app.use(cors({
-    origin: allowedOrigins, // Replace with your client's URL
+    origin: "https://game-ble-i737-git-main-mriduls-projects-81891b06.vercel.app/", // Replace with your client's URL
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://gameble-8.onrender.com',
+  baseURL: 'http://localhost:8000',
   withCredentials: true // This is important for sending cookies with requests
 });
 
