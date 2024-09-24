@@ -55,7 +55,8 @@ const FortuneFlip = () => {
 
     return (
         <div className='w-full p-3' style={{ backgroundImage: `url(${coinFlip})` }}>
-            <div className="flex flex-col items-center bg-gradient-to-r from-cyan-900 to-purple-900 text-white mb-5 p-12 rounded-lg shadow-lg max-w-md mx-auto border border-emerald-600">
+            <div className="flex flex-col items-center bg-gradient-to-r from-gray-800 to-gray-900
+ text-white mb-5 p-12 rounded-lg shadow-lg max-w-md mx-auto border border-emerald-600">
                 <h2 className="text-3xl font-bold mb-4 text-center">Fortune Flip</h2>
                 <p className="mb-4 text-center">Balance: ${balance}</p>
                 <div className='flex justify-center items-center bg-yellow-400 h-20 w-20 rounded-full border-8 border-yellow-600'>

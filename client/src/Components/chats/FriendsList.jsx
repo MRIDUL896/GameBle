@@ -38,7 +38,7 @@ const FriendsList = () => {
                 <h2 className="text-3xl font-bold mb-4 text-center text-blue-300">No Friends</h2> :
                 <h2 className="text-3xl font-bold mb-4 text-center text-blue-300">Your Friends</h2>
             }
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-[90%]">
+            <ul className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-[90%] h-96 md:h-auto p-2 overflow-y-auto">
                 {friendsList!==null && friendsList.map((friend) => (
                     <Friend friend={friend} key={friend._id}/>
                 ))}

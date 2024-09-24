@@ -22,6 +22,7 @@ const SendRequest = () => {
                 console.log(err);
             })
         }catch(err){
+            console.log("there was an error 2")
             console.log(err)
         }
     };

@@ -6,11 +6,15 @@ const userRouter = require('./routes/userRoutes');
 const cors = require('cors');
 const paymentRoutes = require('./routes/paymentRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const path = require('path')
+
+__dirname = path.resolve();
 
 const {app , server} =  require('./socket/socket')
 
 database();
 dotenv.config();
+
 
 app.use(cors({
     origin: 'http://localhost:3000', // Replace with your frontend's URL
@@ -24,6 +28,11 @@ app.use('/gameble',userRouter);
 app.use('/gameble/payment',paymentRoutes);
 app.use('/gameble/message',messageRoutes);
 
+app.use(express.static(path.join(__dirname,"/frontend/dist")))
+
+app.get("*", (req,res) => {
+    res.sendFile(path.join(__dirname,"frontend","dist","index.html"))
+})
 const port = (process.env.PORT) ? process.env.PORT : 8000;
 server.listen(port , () => {
     console.log(`backend started at ${port}`);

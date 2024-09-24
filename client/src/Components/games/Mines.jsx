@@ -83,7 +83,8 @@ const Mines = () => {
 
     return (
         <div className='w-full p-3' style={{ backgroundImage: `url(${mines})` }}>
-            <div className="flex flex-col items-center bg-gradient-to-r from-cyan-900 to-purple-900 text-white mb-5 p-12 rounded-lg shadow-lg max-w-md mx-auto border border-emerald-600">
+            <div className="flex flex-col items-center bg-gradient-to-r from-gray-800 to-gray-900
+  text-white mb-5 p-12 rounded-lg shadow-lg max-w-md mx-auto border border-emerald-600">
                 <h2 className="text-3xl font-bold mb-4">Mines</h2>
                 <p className="mb-4">Balance: ${balance}</p>
                 <div className="mb-4">

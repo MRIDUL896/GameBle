@@ -7,6 +7,8 @@ const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const generateTokenAndSetCookie = require('../utils/generateToken');
 const generateFriendCode = require('../utils/generateFriendCode');
+const { getRecieverSocketId } = require('../socket/socket');
+const {io} = require('../socket/socket')
 
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -180,6 +182,22 @@ const sendFriendRequest = async (req, res) => {
         sender.pendingFriendRequests.push(recipient._id);
 
         await Promise.all([await recipient.save(),await sender.save()]);
+
+        // Emit message to the receiver
+        const receiverSocketId = getRecieverSocketId(recipient._id);
+        let newRequest = {
+            _id : recipient._id,
+            name : recipient.name,
+            email : recipient.email,
+            phoneNo : recipient.phoneNo
+        }
+        // console.log("i am here",receiverSocketId)
+        // console.lo
+        if (receiverSocketId) {
+            // console.log("fine")
+            io.to(receiverSocketId).emit("newRequest", newRequest);
+            // console.log("ending")
+        }
 
         res.status(200).json({ message: "Friend request sent" });
 

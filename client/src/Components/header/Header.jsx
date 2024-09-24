@@ -1,12 +1,15 @@
-import icon from "../../assets/Title.png";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { logout, updatePage } from "../../store/userSlice";
 import { FaBitcoin, FaBars, FaTimes } from "react-icons/fa";
 import api from '../axiosConfig';
+import icon from "../../assets/MainIcon.png";
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [lastScrollTop, setLastScrollTop] = useState(0);
+    const [headerVisible, setHeaderVisible] = useState(true);
+
     const items = ["Home", "Chats", "Profile", "Games", "Promotions", "Support", "History"];
     const { isLoggedIn, userInfo, page } = useSelector((state) => state.user);
     const email = userInfo ? userInfo.email : "";
@@ -31,16 +34,36 @@ const Header = () => {
         window.location.href = "/";
     };
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            if (currentScroll > lastScrollTop) {
+                // Scrolling down
+                setHeaderVisible(false);
+            } else {
+                // Scrolling up
+                setHeaderVisible(true);
+            }
+            setLastScrollTop(currentScroll <= 0 ? 0 : currentScroll); // For Mobile or negative scrolling
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollTop]);
+
     return (
-        <div className="bg-gray-950 p-4 ">
+        <div
+            className={`fixed top-0 left-6 p-3 rounded-lg z-10 m-1 w-[95%] bg-gray-950 text-white shadow-md transition-transform duration-300 ${
+                headerVisible ? 'translate-y-0' : '-translate-y-full'
+            }`}
+        >
             <div className="container mx-auto">
-                <div className="flex items-center justify-evenly">
-                    <a href="/" className="flex items-center justify-center p-5 gap-5 cursor-pointer transition-transform duration-300 hover:scale-105">
-                        <img src={icon} alt="" className="h-12" />
-                        <span className="text-4xl font-bold text-blue-400">GameBle</span>
+                <div className="flex items-center justify-between gap-1">
+                    <a href="/" className="flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105">
+                        <img src={icon} alt="Main Icon" className="h-13" />
                     </a>
-                    
-                    <div className="hidden md:flex md:items-center md:justify-center md:gap-2">
+
+                    <div className="hidden md:flex">
                         <nav className="flex items-center gap-2">
                             {items.map((item) => (
                                 <button
@@ -56,7 +79,7 @@ const Header = () => {
                                 </button>
                             ))}
                         </nav>
-                        
+
                         {isLoggedIn && (
                             <div className="flex items-center space-x-4">
                                 <div className="flex items-center bg-gradient-to-r from-yellow-600 to-yellow-700 text-white px-3 py-1 rounded-md shadow-lg">
@@ -72,7 +95,7 @@ const Header = () => {
                             </div>
                         )}
                     </div>
-                    
+
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className="md:hidden text-gray-300 hover:text-white focus:outline-none"
@@ -80,7 +103,7 @@ const Header = () => {
                         {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
                     </button>
                 </div>
-                
+
                 {isMenuOpen && (
                     <div className="md:hidden mt-4">
                         <nav className="flex flex-col space-y-2">
@@ -98,9 +121,9 @@ const Header = () => {
                                 </button>
                             ))}
                         </nav>
-                        
+
                         {isLoggedIn && (
-                            <div className="mt-4 space-y-2">
+                            <div className="mt-4 mx-2 space-y-2">
                                 <div className="flex items-center bg-gradient-to-r from-yellow-600 to-yellow-700 text-white px-3 py-2 rounded-md shadow-lg">
                                     <FaBitcoin className="mr-2" />
                                     <span>{(Math.floor(userInfo.balance * 100) / 100).toFixed(2)}</span>
@@ -116,14 +139,6 @@ const Header = () => {
                     </div>
                 )}
             </div>
-            
-            {isLoggedIn && (
-                <div className="text-center py-4">
-                    <span className="text-xl md:text-2xl font-semibold bg-gradient-to-r from-purple-500 to-indigo-500 text-transparent bg-clip-text">
-                        Welcome, {userInfo.name || ''}
-                    </span>
-                </div>
-            )}
         </div>
     );
 };

@@ -51,7 +51,7 @@ const LoginModal = ({ onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-8 rounded-lg w-96">
                 <h2 className="text-2xl mb-4">{isLogin ? 'Login' : 'Sign Up'}</h2>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">

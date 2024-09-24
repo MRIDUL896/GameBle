@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "gameble_server": "file:.."
+  }
+}

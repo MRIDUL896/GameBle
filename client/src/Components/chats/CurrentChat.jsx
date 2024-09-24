@@ -71,7 +71,7 @@ const CurrentChat = () => {
 
     return (
         <div className="flex-1 bg-gray-950 text-gray-100 p-6 md:flex flex-col justify-between rounded-r-2xl hidden ">
-            <div className="chat-window h-full overflow-y-auto">
+            <div className="chat-window h-full overflow-y-auto flex flex-col-reverse">
                 {messages.length > 0 ? (
                     <ul>
                         {messages.map(msg => (

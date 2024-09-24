@@ -13,7 +13,9 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor} >
         <SocketContextProvider>
+          <div className='bg-black'>
           <App/>
+          </div>
         </SocketContextProvider>
       </PersistGate>
     </Provider>

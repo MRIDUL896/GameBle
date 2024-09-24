@@ -1,21 +1,23 @@
 import React from 'react';
 import coin from '../../assets/coin_flip.jpeg';
 import mines from '../../assets/mines.webp';
+import dice from '../../assets/Dice.jpg'
+import roulette from '../../assets/Roulette.jpg'
 
 const FeaturedGames = () => {
     // This would typically come from an API or database
     const games = [
         { id: 1, name: "Fortune Flip", image: coin, category: "Double or Nothing",link : "/fortuneflip" },
         { id: 2, name: "Mines", image: mines, category: "Grid Games" , link : "/mines"},
-        { id: 3, name: "Lucky Roulette", image: "path/to/roulette-image.jpg", category: "Table Games" , link : "/roulette" },
-        { id: 4, name: "Poker Night", image: "path/to/poker-image.jpg", category: "Poker", link : "/" },
+        { id: 3, name: "Dice", image: dice, category: "Dice Games" , link : "/dice" },
+        { id: 4, name: "Roulette Game", image: roulette, category: "Roulette", link : "/roulettegame" },
     ];
 
     return (
         <div className="bg-gray-800 p-8 w-[95%] rounded-xl">
             <div className="container mx-auto">
-                <h2 className="text-3xl font-bold text-white mb-6">Featured Games</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-blue-200">
+                <h2 className="text-3xl font-bold text-blue-400 text-center mb-6">Featured Games</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-blue-200">
                     {games.map((game) => (
                         <div key={game.id} className="bg-gray-950 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105
                         hover:border-2 hover:border-purple-900">

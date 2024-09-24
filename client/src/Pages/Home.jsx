@@ -4,6 +4,7 @@ import Support from "../Components/Support"
 import { useSelector } from "react-redux";
 import ProfileCard from "../Components/ProfileCard";
 import ChatsPage from "../Components/chats/ChatsPage";
+import RouletteGame from "../Components/games/RouletteGame";
 
 const Home = () => {
     const { page } = useSelector((state) => state.user);
@@ -14,6 +15,7 @@ const Home = () => {
            {(page==="Support" || page==="Home" || page==="none") && <Support/>}
            { (page==="Profile" ) && <ProfileCard/>}
            { (page==="Chats") && <ChatsPage/> }
+           { (page === "roulettegame" && <RouletteGame/>)}
         </div>
     )
 }
