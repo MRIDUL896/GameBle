@@ -1,5 +1,5 @@
 const express = require('express'); 
-const { handleSignup, handleLogin, handleLogout, handleBalanceUpdate, getUsersForSidebar, sendFriendRequest, acceptFriendRequest, incomingFriendRequests, pendingFriendRequests, findConversation, getUserConversations, getInfo } = require('../controllers/userController');
+const { handleSignup, handleLogin, handleLogout, handleBalanceUpdate, getUsersForSidebar, sendFriendRequest, acceptFriendRequest, incomingFriendRequests, pendingFriendRequests, findConversation, getUserConversations, getInfo, test } = require('../controllers/userController');
 const protectRoute = require('../middlewaares/protectRoute');
 
 const userRouter = express.Router();
@@ -16,6 +16,7 @@ userRouter.post('/acceptRequest',protectRoute,acceptFriendRequest);
 userRouter.get('/getConversations',protectRoute,getUserConversations);
 userRouter.get('/getChats/:id',protectRoute,findConversation);
 userRouter.get('/getUserInfo/:id',getInfo);
+userRouter.get('/test',test)
 
 
 module.exports = userRouter;

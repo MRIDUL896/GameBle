@@ -17,7 +17,7 @@ dotenv.config();
 
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with your client's URL
+    origin: 'https://gameble-9.onrender.com/', // Replace with your client's URL
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

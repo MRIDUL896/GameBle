@@ -14,6 +14,9 @@ dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const saltRound = 10;
 
+const test = (req,res) => {
+    res.json({msg : "test success"})
+}
 
 const handleSignup = async (req , res) => {
     let user = req.body;
@@ -362,5 +365,5 @@ const getInfo = async (req,res) => {
 
 module.exports = {
     handleSignup,handleLogin,handleLogout,handleBalanceUpdate,getUsersForSidebar,sendFriendRequest,acceptFriendRequest,incomingFriendRequests,
-    pendingFriendRequests, findConversation, getUserConversations,getInfo
+    pendingFriendRequests, findConversation, getUserConversations,getInfo,test
 }
