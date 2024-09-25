@@ -62,7 +62,7 @@ const LoginModal = ({ onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-lg w-96">
+            <div className="bg-gray-900 p-8 rounded-lg w-96">
                 <h2 className="text-2xl mb-4">{isLogin ? 'Login' : 'Sign Up'}</h2>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     {!isLogin && (
@@ -71,7 +71,7 @@ const LoginModal = ({ onClose }) => {
                             value={name}
                             onChange={(e) => setname(e.target.value)}
                             placeholder="Name"
-                            className="p-2 border rounded"
+                            className="p-2 border rounded bg-gray-800"
                             required
                         />
                     )}
@@ -81,7 +81,7 @@ const LoginModal = ({ onClose }) => {
                             value={phoneNo}
                             onChange={(e) => setPhoneNo(e.target.value)}
                             placeholder="PhoneNo"
-                            className="p-2 border rounded"
+                            className="p-2 border rounded bg-gray-800"
                             required
                         />
                     )}
@@ -90,7 +90,7 @@ const LoginModal = ({ onClose }) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Email"
-                        className="p-2 border rounded"
+                        className="p-2 border rounded bg-gray-800"
                         required
                     />
                     <input
@@ -98,7 +98,7 @@ const LoginModal = ({ onClose }) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Password"
-                        className="p-2 border rounded"
+                        className="p-2 border rounded bg-gray-800"
                         required
                     />
                     <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
@@ -115,6 +115,17 @@ const LoginModal = ({ onClose }) => {
                     </button>
                 </p>
             </div>
+            <CookieConsent
+                location="bottom"
+                buttonText="Accept"
+                cookieName="myAppCookieConsent"
+                style={{ background: "#2B373B" }}
+                buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+                expires={150}
+            >
+                This website uses cookies to enhance the user experience.{" "}
+                <a href="/privacy-policy" style={{ color: "yellow" }}>Learn more</a>
+            </CookieConsent>
         </div>
     );
 };
