@@ -38,7 +38,7 @@ const handleSignup = async (req , res) => {
             const newUser = await userModel.create(user);
             if (newUser) {
                 // Generate JWT token here
-                const token = generateTokenAndSetCookie(newUser._id, res);
+                generateTokenAndSetCookie(newUser._id, res);
                 const code = generateFriendCode(newUser._id);
 
                 newUser.friendCode = code;
@@ -51,7 +51,6 @@ const handleSignup = async (req , res) => {
                     username: newUser.username,
                     profilePic: newUser.profilePic,
                     friendCode : newUser.friendCode,
-                    token : token
                 });
             } else {
                 res.status(400).json({ error: "Invalid user data" });
