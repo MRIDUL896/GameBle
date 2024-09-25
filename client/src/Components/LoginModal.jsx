@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../store/userSlice';
 import api from './axiosConfig'
+import CookieConsent from "react-cookie-consent"
 
 const LoginModal = ({ onClose }) => {
     const [isLogin, setIsLogin] = useState(true);
