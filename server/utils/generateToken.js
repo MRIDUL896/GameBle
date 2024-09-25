@@ -14,6 +14,7 @@ const generateTokenAndSetCookie = (userId, res) => {
         maxAge: 15 * 24 * 60 * 60 * 1000,
         httpOnly: true,  // Prevents client-side access to the cookie
         secure: true,  // Set to true if in production
+        sameSite: 'none',
 		path: '/',  // Cookie is accessible on all routes
     });
 };

@@ -66,7 +66,7 @@ const handleSignup = async (req , res) => {
 
 const handleLogin = async (req,res) => {
     const { email, password } = req.body;
-    console.log("the cookies are",req.body)
+    console.log("the cookies are",req.cookies)
     try{
         const user = await userModel.findOne({email});
         //if not found

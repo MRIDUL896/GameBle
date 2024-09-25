@@ -10,6 +10,7 @@ const protectRoute = async (req,res,next) => {
         console.log(token)
         console.log(req.cookies)
         if(!token){
+            console("failure")
             return res.status(401).json({err : "Unauthorised"});
         }
         console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
