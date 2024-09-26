@@ -46,7 +46,7 @@ const LoginModal = ({ onClose }) => {
                     password,
                     phoneNo
                 });
-                setInProcess(true);
+                setInProcess(false);
                 alert('Signup successful! Please log in.');
                 setIsLogin(true);
             }
