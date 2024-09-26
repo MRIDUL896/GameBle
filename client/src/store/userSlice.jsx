@@ -4,7 +4,7 @@ const initialState = {
     isLoggedIn: false,
     userInfo: null,
     otherUserInfo: 'x',
-    page : "games",
+    page : "Home",
     currentChating : ""
 }
 
