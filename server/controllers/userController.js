@@ -27,9 +27,9 @@ const handleSignup = async (req , res) => {
         if(existing){
             return res.json({message : "user already registered"})
         }
-        if(pswdStrength(pswd) == "weak"){
-            return res.json({ message: "password too weak" });
-        }
+        // if(pswdStrength(pswd) == "weak"){
+        //     return res.json({ message: "password too weak" });
+        // }
         else{
             //hash
             const hashedPass = await bcrypt.hash(pswd,saltRound);
