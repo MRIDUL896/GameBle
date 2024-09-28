@@ -63,7 +63,7 @@ const Header = () => {
         >
             <div className="container mx-auto">
                 <div className="flex items-center justify-between gap-1">
-                    <a href="/" className="flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105">
+                    <a href="/" className="flex items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105" onClick={() => dispatch(updatePage("Home"))}>
                         <img src={icon} alt="Main Icon" className="h-13" />
                     </a>
 
