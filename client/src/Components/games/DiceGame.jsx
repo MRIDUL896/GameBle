@@ -66,15 +66,19 @@ const DiceGame = () => {
                 await api.put('/gameble/updateBalance', {
                     email: userInfo.email,
                     newBalance
-                });
-                dispatch(updateBalance(newBalance)); // Update Redux state
+                }).then(() => {
+                    dispatch(updateBalance(newBalance)); // Update Redux state
+                }).catch(error => {
+                    console.error("Error updating balance:", error);
+                    setBalance(balance);
+                }).finally(() => {
+                    setGameResult(sum === guessSum ? 'You Won!' : 'You Lost!');
+                    setIsRolling(false);
+                })
             } catch (error) {
                 console.error("Error updating balance:", error);
                 setBalance(balance);
             }
-
-            setGameResult(sum === guessSum ? 'You Won!' : 'You Lost!');
-            setIsRolling(false);
         }, 1000);
     };
 
@@ -83,7 +87,7 @@ const DiceGame = () => {
 
             <div className='bg-gradient-to-r from-gray-800 to-gray-900 text-white p-8 rounded-lg shadow-lg max-w-4xl w-full border border-emerald-600'>
                 <h2 className="text-7xl font-bold mb-4 text-center">Dice Roll Game</h2>
-                <div className="flex flex-row">
+                <div className="flex flex-col md:flex-row">
                     {/* Left Section: Dice Roll */}
                     <div className="flex-1 flex flex-col justify-center items-center">
                         <div className="flex justify-center items-center mb-4 gap-4">

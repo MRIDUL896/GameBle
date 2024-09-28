@@ -41,14 +41,16 @@ const FortuneFlip = () => {
                 await api.put('/gameble/updateBalance', {
                     email: userInfo.email,
                     newBalance
-                });
-                dispatch(updateBalance(newBalance)); // Update Redux state
+                }).then(() => {
+                    dispatch(updateBalance(newBalance)); // Update Redux state
+                }).finally(() => {
+                    setIsFlipping(false);
+                })
             } catch (error) {
                 console.error("Error updating balance:", error);
                 setBalance(balance);
+                setIsFlipping(false);
             }
-
-            setIsFlipping(false);
         }, 1000);
     };
 

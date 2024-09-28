@@ -31,7 +31,7 @@ const Header = () => {
             dispatch(updatePage("none"));
         }
         setIsMenuOpen(false);
-        window.location.href = "/";
+        // window.location.href = "/";
     };
 
     useEffect(() => {
