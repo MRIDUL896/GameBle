@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { logout, updatePage } from "../../store/userSlice";
 import { FaBitcoin, FaBars, FaTimes } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 import api from '../axiosConfig';
 import icon from "../../assets/MainIcon.png";
 
@@ -9,6 +10,7 @@ const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [lastScrollTop, setLastScrollTop] = useState(0);
     const [headerVisible, setHeaderVisible] = useState(true);
+    const location = useLocation();
 
     const items = ["Home", "Chats", "Profile", "Games", "Promotions", "Support", "History"];
     const { isLoggedIn, userInfo, page } = useSelector((state) => state.user);
@@ -31,7 +33,9 @@ const Header = () => {
             dispatch(updatePage("none"));
         }
         setIsMenuOpen(false);
-        // window.location.href = "/";
+        if(location.pathname !== "/"){
+            window.location.href = "/";
+        }
     };
 
     useEffect(() => {
