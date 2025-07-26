@@ -30,10 +30,10 @@ const LoginModal = ({ onClose }) => {
                     password
                 });
                 const { token } = response.data;
-                console.log(response.data)
-                console.log(token)
+                // console.log(response.data)
+                // console.log(token)
                 const jwt = getCookie('jwt');
-                console.log('JWT Cookie:', jwt);
+                // console.log('JWT Cookie:', jwt);
                 dispatch(login(response.data.user));
                 setInProcess(false);
                 onClose();
