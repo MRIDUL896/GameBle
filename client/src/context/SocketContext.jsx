@@ -16,7 +16,8 @@ export const SocketContextProvider = ({ children }) => {
 
     useEffect(() => {
         if(userInfo){
-            const backend = process.env.BACKENDURL ? process.env.BACKENDURL : "https://gameable.onrender.com"
+            //console.log(process.env.REACT_APP_BACKENDURL)
+            const backend = process.env.REACT_APP_BACKENDURL ? process.env.REACT_APP_BACKENDURL : "http://localhost:8000/"
             const socket = io(backend,{
                 query:{
                     userId : userInfo?.id
