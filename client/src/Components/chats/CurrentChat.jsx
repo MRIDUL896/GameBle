@@ -15,9 +15,9 @@ const CurrentChat = () => {
     useEffect(() => {
         if (socket) {
             const handleNewMessage = (newMessage) => {
-                console.log("socket")
+                // console.log("socket")
                 // Only update if the message belongs to the current chat
-                    console.log('hi')
+                    // console.log('hi')
                     setMessages(prevMessages => [...prevMessages, newMessage]);
             };
     

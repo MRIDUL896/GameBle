@@ -9,7 +9,7 @@ const Profile = () => {
     useEffect(() => {
         const getInfo = async () => {
             await api.get(`/gameble/getUserInfo/${userInfoId}`).then((res) =>{
-                console.log(res.data)
+                // console.log(res.data)
                 setUserInfo(res.data);
             }).catch((err) => {
                 console.log(err);

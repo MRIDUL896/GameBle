@@ -65,7 +65,7 @@ const handleSignup = async (req , res) => {
 
 const handleLogin = async (req,res) => {
     const { email, password } = req.body;
-    console.log("the cookies are",req.cookies)
+    // console.log("the cookies are",req.cookies)
     try{
         const user = await userModel.findOne({email});
         //if not found
@@ -150,7 +150,7 @@ const handleBalanceUpdate = async (req, res) => {
 
 const getUsersForSidebar = async (req, res) => {
 	try {
-        console.log("hi",req.cookies.jwt)
+        // console.log("hi",req.cookies.jwt)
 		const userId = req.user._id;
 		const userWithFriends = await userModel.findById(userId).populate('friends', 'name email phoneNo'); // Specify which fields of friends you want to retrieve
         const friends = userWithFriends.friends;

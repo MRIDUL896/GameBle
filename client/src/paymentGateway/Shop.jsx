@@ -21,12 +21,13 @@ const Shop = () => {
         }
         try {
             const orderResponse = await api.post(`/gameble/payment/create-order`, {
-                amount: selectedAmount
+                amount: selectedAmount.amount
             });
             const { data } = orderResponse;
-
+            //console.log(process.env.REACT_APP_RAZORPAY_KEY_ID)
+            
             const options = {
-                key: process.env.RAZORPAY_KEY_ID, // Accessing the key from the .env file
+                key: process.env.REACT_APP_RAZORPAY_KEY_ID, // Accessing the key from the .env file
                 amount: data.amount,
                 currency: data.currency,
                 name: 'Test Company',
@@ -35,7 +36,7 @@ const Shop = () => {
                 handler: async function (response) {
                     try {
                         const verifyResponse = await api.post(`/gameble/payment/verify-payment`, response);
-                        console.log(verifyResponse.data);
+                        //console.log(verifyResponse.data);
                         alert('Payment successful');
                     } catch (error) {
                         console.error('Verification error:', error);

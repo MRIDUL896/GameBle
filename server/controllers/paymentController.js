@@ -10,7 +10,12 @@ const razorpay = new Razorpay({
 
 const createOrder = async (req, res) => {
   try {
-    const {amount} = req.body.amount;
+    const {amount} = req.body;
+    if (!amount || typeof amount !== 'number') {
+     // console.log("hi")
+      return res.status(400).json({ message: 'Invalid amount format' });
+    }
+    //console.log(amount)
     const options = {
       amount: amount, // amount in paise, e.g., 50000 paise = ₹500
       currency: 'INR',

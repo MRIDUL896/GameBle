@@ -20,7 +20,7 @@ const sendMessage = async (req, res) => {
         // Correct receiverId logic
         const receiverId = convo.participants.find(participant => participant.toString() !== senderId.toString());
 
-        console.log(senderId,receiverId)
+        // console.log(senderId,receiverId)
         // Create new message
         const newMessage = await Message.create({
             senderId,

@@ -7,13 +7,12 @@ app.use(cookieParser())
 const protectRoute = async (req,res,next) => {
     try{
         const token = req.cookies.jwt;
-        console.log(token)
-        console.log(req.cookies)
+        // console.log(token)
+        // console.log(req.cookies)
         if(!token){
             console("failure")
             return res.status(401).json({err : "Unauthorised"});
         }
-        console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
          
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
         if(!decoded){

@@ -6,14 +6,15 @@ const userRouter = require('./routes/userRoutes');
 const cors = require('cors');
 const paymentRoutes = require('./routes/paymentRoutes');
 const messageRoutes = require('./routes/messageRoutes');
-const {app , server} =  require('./socket/socket')
+const {app , server} =  require('./socket/socket');
 
 database();
 dotenv.config();
 
+const frontend = process.env.FRONTENDURL ? process.env.FRONTENDURL : "http://localhost:3000";
 app.use(cors({
-    origin: "https://gameable-frontend.onrender.com", // Allow requsts from this origin
-    credentials: true, // Allow credentials (cookies, etc.)
+    origin: frontend, 
+    credentials: true,
 }));
 app.use(express.json());
 app.use(cookieParser());

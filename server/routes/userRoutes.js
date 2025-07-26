@@ -16,7 +16,7 @@ userRouter.post('/acceptRequest',protectRoute,acceptFriendRequest);
 userRouter.get('/getConversations',protectRoute,getUserConversations);
 userRouter.get('/getChats/:id',protectRoute,findConversation);
 userRouter.get('/getUserInfo/:id',getInfo);
-userRouter.get('/test',test)
+userRouter.get('/test',test);
 
 
 module.exports = userRouter;

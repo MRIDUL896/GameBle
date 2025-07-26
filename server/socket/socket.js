@@ -4,11 +4,13 @@ const express = require('express')
 
 const app = express();
 
+const frontend = process.env.FRONTENDURL ? process.env.FRONTENDURL : "http://localhost:3000";
 const server = http.createServer(app);
 const io = new Server(server,{
     cors:{
-        origin:["https://gameable-frontend.onrender.com"],
-        methods:["GET","POST","PUT","DELETE"]
+        origin:[frontend],
+        methods:["GET","POST","PUT","DELETE"],
+        credentials: true
     }
 });
 
@@ -21,7 +23,7 @@ const userSocketMap = {    // {user_id : socket_id}
 }
 
 io.on("connection",(socket) => {
-    console.log("user connected");
+    // console.log("user connected");
 
     const userId = socket.handshake.query.userId;
 
@@ -30,7 +32,7 @@ io.on("connection",(socket) => {
     io.emit("getOnlineUsers",Object.keys(userSocketMap));
 
     socket.on("disconnect",()=>{
-        console.log("user disconnected,",socket.id);
+        // console.log("user disconnected,",socket.id);
         delete userSocketMap[userId];
         io.emit("getOnlineUsers",Object.keys(userSocketMap));
     })

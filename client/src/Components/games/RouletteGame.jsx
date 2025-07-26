@@ -81,7 +81,7 @@ const RouletteGame = () => {
             }
 
             setBalance(newBalance);
-            console.log(newBalance)
+            // console.log(newBalance)
             setWinningNumber(winningNumber); // Set the winning number for synchronization
 
             // Update balance in the backend

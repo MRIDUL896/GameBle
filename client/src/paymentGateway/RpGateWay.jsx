@@ -19,7 +19,7 @@ const RpGateway = ({ amount }) => {
             const { data } = orderResponse;
 
             const options = {
-                key: process.env.RAZORPAY_KEY_ID, // Accessing the key from the .env file
+                key: process.env.REACT_APP_RAZORPAY_KEY_ID, // Accessing the key from the .env file
                 amount: data.amount,
                 currency: data.currency,
                 name: 'Test Company',
@@ -28,7 +28,7 @@ const RpGateway = ({ amount }) => {
                 handler: async function (response) {
                     try {
                         const verifyResponse = await api.post(`/gameble/payment/verify-payment`, response);
-                        console.log(verifyResponse.data);
+                        // console.log(verifyResponse.data);
                         alert('Payment successful');
                     } catch (error) {
                         console.error('Verification error:', error);

@@ -21,11 +21,11 @@ const IncomingRequests = () => {
     useEffect(() => {
         if(socket){
             const handleNewReq = (newRequest) => {
-                console.log("inside")
+                //console.log("inside")
                 const newReq = async () => {
                     try {
                         const response = await api.get('/gameble/getRequests');
-                        console.log(response.data)
+                        //console.log(response.data)
                         setReqList(response.data); // assuming response.data holds the array of friends
                     } catch (err) {
                         console.log(err);
