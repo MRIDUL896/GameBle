@@ -101,7 +101,7 @@ const Mines = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="mr-2">Bet Amount:</label>
+                    <label className="mr-2">Coins:</label>
                     <input
                         type="number"
                         value={betAmount}

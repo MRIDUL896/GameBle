@@ -67,7 +67,7 @@ const FortuneFlip = () => {
                     )}
                 </div>
                 <div className="flex flex-col items-center m-4">
-                    <p className="mb-2">Select Bet Amount:</p>
+                    <p className="mb-2">Select Coins:</p>
                     <div className="flex justify-between gap-10">
                         {[10, 50, 100].map(amount => (
                             <button

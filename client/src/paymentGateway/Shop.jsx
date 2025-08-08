@@ -75,7 +75,7 @@ const Shop = () => {
           >
             <h3 className="text-lg text-blue-200 mb-2">{pkg.amount} Coins</h3>
             <Coins className="mx-auto mb-2 text-yellow-400" size={32} />
-            <p className="font-bold text-green-300">${pkg.price}</p>
+            <p className="font-bold text-green-300">Rs. {pkg.price}</p>
           </div>
         ))}
       </div>

@@ -142,7 +142,7 @@ const RouletteGame = () => {
                             </button>
 
                             <div className="m-5">
-                                <p className="mb-2">Select Bet Amount:</p>
+                                <p className="mb-2">Select coins</p>
                                 <div className="flex gap-4">
                                     {[10, 50, 100].map(amount => (
                                         <button

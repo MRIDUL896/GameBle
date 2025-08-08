@@ -12,7 +12,7 @@ const Header = () => {
     const [headerVisible, setHeaderVisible] = useState(true);
     const location = useLocation();
 
-    const items = ["Home", "Chats", "Profile", "Games", "Promotions", "Support", "History"];
+    const items = ["Home", "Chats", "Profile", "Games", "Promotions", "Support"];
     const { isLoggedIn, userInfo, page } = useSelector((state) => state.user);
     const email = userInfo ? userInfo.email : "";
     const dispatch = useDispatch();
